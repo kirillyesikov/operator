@@ -16,6 +16,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: radio-service
+spec:
+  selector:
+    app: radio
   ports:
   - protocol: TCP
     port: 80
