@@ -106,7 +106,7 @@ func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *v
 							Image: "kyesikov/radio:latest",
 							Ports: []corev1.ContainerPort{
 								{
-									ContainerPort: 80,
+									ContainerPort: 3000,
 								},
 							},
 						},

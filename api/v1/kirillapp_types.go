@@ -36,7 +36,7 @@ type KirillAppSpec struct {
 	Resources corev1.ResourceRequirements `json:"resources,omitempty"`
 
 	// Foo is an example field of KirillApp. Edit kirillapp_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+
 }
 
 // KirillAppStatus defines the observed state of KirillApp

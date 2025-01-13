@@ -39,10 +39,6 @@ spec:
           spec:
             description: KirillAppSpec defines the desired state of KirillApp
             properties:
-              foo:
-                description: Foo is an example field of KirillApp. Edit kirillapp_types.go
-                  to remove/update
-                type: string
               image:
                 type: string
               name:
