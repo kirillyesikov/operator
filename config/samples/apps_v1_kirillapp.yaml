@@ -20,9 +20,6 @@ spec:
         image: kyesikov/radio:latest
         ports:
         - containerPort: 3000
-  replicas: 2
-      imagePullSecrets:
-      - name: regcred
 ---
 apiVersion: v1
 kind: Service
