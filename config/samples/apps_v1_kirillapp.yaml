@@ -20,6 +20,8 @@ spec:
         image: kyesikov/radio:latest
         ports:
         - containerPort: 3000
+      imagePullSecrets:
+      - name: radiosecret
 ---
 apiVersion: v1
 kind: Service
