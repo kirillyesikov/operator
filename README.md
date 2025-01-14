@@ -1,5 +1,5 @@
 # operator
-<<<<<<< HEAD
+
 Kubernetes operator with Open SDK
 =======
 // TODO(user): Add simple overview of use/purpose
