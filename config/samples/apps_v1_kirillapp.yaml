@@ -26,10 +26,8 @@ metadata:
   name: radio-service
 spec:
   selector:
-    app: radio
+    app: kirillapp
   ports:
     - port: 80
       targetPort: 3000
-  selector:
-    app: kirillapp
   type: LoadBalancer

@@ -23,12 +23,12 @@ import (
 	"github.com/kirillyesikov/operator/api/v1"
 	apps "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/utils/pointer"
 	ctrl "sigs.k8s.io/controller-runtime"
-
-	"k8s.io/apimachinery/pkg/runtime"
-
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
@@ -91,6 +91,10 @@ func (r *KirillAppReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *v1.KirillApp) error {
 	log := log.FromContext(ctx)
 
+	labels := map[string]string{
+		"app": kirillApp.Name,
+	}
+
 	deployment := &apps.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      kirillApp.Name + "-deployment",
@@ -98,7 +102,14 @@ func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *v
 		},
 		Spec: apps.DeploymentSpec{
 			Replicas: pointer.Int32Ptr(2),
+			Selector: &metav1.LabelSelector{
+				MatchLabels: labels,
+			},
+
 			Template: corev1.PodTemplateSpec{
+				ObjectMeta: metav1.ObjectMeta{
+					Labels: labels,
+				},
 				Spec: corev1.PodSpec{
 					Containers: []corev1.Container{
 						{
@@ -119,19 +130,18 @@ func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *v
 	err := r.Get(ctx, client.ObjectKey{Namespace: kirillApp.Namespace, Name: deployment.Name}, deployment)
 
 	if err != nil {
-		if client.IgnoreNotFound(err) != nil {
+		if apierrors.IsNotFound(err) {
+			log.Info("Creating a new Deployment for KirillApp", "name", deployment.Name)
+			if createErr := r.Create(ctx, deployment); createErr != nil {
+				log.Error(createErr, "failed to create Deployment for KirillApp")
+				return createErr
+			}
+			log.Info("Deployment created successfully", "name", deployment.Name)
+
+		} else {
 			log.Error(err, "unable to fetch Deployment for KirillApp")
-
 			return err
 		}
-
-		log.Info("Creating a new Deployment for KirillApp", "name", deployment.Name)
-		err := r.Create(ctx, deployment)
-		if err != nil {
-			log.Error(err, "failed to create Deployment for KirillApp")
-			return err
-		}
-		log.Info("Deployment created successfully", "name", deployment.Name)
 	} else {
 		log.Info("Deployment already exists", "name", deployment.Name)
 
@@ -145,6 +155,20 @@ func (r *KirillAppReconciler) ensureService(ctx context.Context, kirillApp *apps
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      kirillApp.Name + "-service",
 			Namespace: kirillApp.Namespace,
+		},
+
+		Spec: corev1.ServiceSpec{
+			Selector: map[string]string{
+				"app": kirillApp.Name,
+			},
+			Ports: []corev1.ServicePort{
+				{
+					Protocol:   corev1.ProtocolTCP,
+					Port:       80,
+					TargetPort: intstr.FromInt(3000),
+				},
+			},
+			Type: corev1.ServiceTypeLoadBalancer,
 		},
 	}
 
