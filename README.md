@@ -2,10 +2,10 @@
 
 Kubernetes operator with Open SDK
 =======
-// TODO(user): Add simple overview of use/purpose
+A Kubernetes operator made from scratch for learning purposes
 
 ## Description
-// TODO(user): An in-depth paragraph about your project and overview of use
+Introducing a new Kubernetes workload resource using API extension and Open SDK framework 
 
 ## Getting Started
 
