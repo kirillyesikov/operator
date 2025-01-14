@@ -93,7 +93,7 @@ kubectl apply -f https://raw.githubusercontent.com/<org>/operator/<tag or branch
 ```
 
 ## Contributing
-// TODO(user): Add detailed information on how you would like others to contribute to this project
+Currently debugging the controller code
 
 **NOTE:** Run `make help` for more information on all potential `make` targets
 
