@@ -9,18 +9,14 @@ metadata:
     app: kirillapp
 spec:
   replicas: 2
-    containers:
-      name: kirillapp     
-      image: kyesikov/radio:latest  # Example image, replace with your `image` field
-      port: 
-        containerPort: 3000
-  resources:
-    limits:
-      memory: "512Mi"  # Example resource limits, adjust according to your CRD
-      cpu: "1"
-    requests:
-      memory: "256Mi"                                                
-      cpu: "0.5"
+  name: kirillapp
+  image: kyesikov/radio:latest
+  port: 3000
+  labels:
+    app: kirillapp
+  selector:
+    matchLabels:
+      app: kirillapp
 ---
 apiVersion: v1
 kind: Service

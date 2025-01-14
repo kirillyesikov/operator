@@ -103,7 +103,6 @@ func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *a
 			Selector: &metav1.LabelSelector{
 				MatchLabels: labels,
 			},
-
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: labels,
@@ -124,25 +123,22 @@ func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *a
 			},
 		},
 	}
-
 	err := r.Get(ctx, client.ObjectKey{Namespace: kirillApp.Namespace, Name: deployment.Name}, deployment)
-
 	if err != nil {
 		if apierrors.IsNotFound(err) {
 			log.Info("Creating a new Deployment for KirillApp", "name", deployment.Name)
 			if createErr := r.Create(ctx, deployment); createErr != nil {
 				log.Error(createErr, "failed to create Deployment for KirillApp")
 				return createErr
+
 			}
 			log.Info("Deployment created successfully", "name", deployment.Name)
-
 		} else {
 			log.Error(err, "unable to fetch Deployment for KirillApp")
 			return err
 		}
 	} else {
-		log.Info("Deployment already exists", "name", deployment.Name)
-
+		log.Info("Deployment already exists", "Namespace", deployment.Namespace, "Name", deployment.Name)
 	}
 	return nil
 }
