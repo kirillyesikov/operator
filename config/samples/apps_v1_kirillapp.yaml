@@ -1,17 +1,19 @@
 apiVersion: apps.kirillesikov.atwebpages.com/v1
 kind: KirillApp
 metadata:
-  name : kirillapp-sample
+  name: kirillapp-sample
+  namespace: operator-system  
   labels:
     app.kubernetes.io/name: operator
     app.kubernetes.io/managed-by: kustomize
     app: kirillapp
 spec:
-  size: 3
   replicas: 2
-  name: kirillapp-sample
-  image: kyesikov/radio:latest  # Example image, replace with your `image` field
-  port: 3000  # Example port, replace with your `port` field
+    containers:
+      name: kirillapp     
+      image: kyesikov/radio:latest  # Example image, replace with your `image` field
+      port: 
+        containerPort: 3000
   resources:
     limits:
       memory: "512Mi"  # Example resource limits, adjust according to your CRD

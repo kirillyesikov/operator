@@ -20,7 +20,7 @@ import (
 	"context"
 
 	"github.com/go-logr/logr"
-	"github.com/kirillyesikov/operator/api/v1"
+	appsv1 "github.com/kirillyesikov/operator/api/v1"
 	apps "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -31,8 +31,6 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
-
-	appsv1 "github.com/kirillyesikov/operator/api/v1"
 )
 
 // KirillAppReconciler reconciles a KirillApp object
@@ -88,11 +86,11 @@ func (r *KirillAppReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 	return ctrl.Result{}, nil
 }
 
-func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *v1.KirillApp) error {
+func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *appsv1.KirillApp) error {
 	log := log.FromContext(ctx)
 
 	labels := map[string]string{
-		"app": kirillApp.Name,
+		"app": kirillApp.Spec.Name,
 	}
 
 	deployment := &apps.Deployment{
@@ -101,7 +99,7 @@ func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *v
 			Namespace: kirillApp.Namespace,
 		},
 		Spec: apps.DeploymentSpec{
-			Replicas: pointer.Int32Ptr(2),
+			Replicas: pointer.Int32Ptr(kirillApp.Spec.Replicas),
 			Selector: &metav1.LabelSelector{
 				MatchLabels: labels,
 			},
@@ -113,11 +111,11 @@ func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *v
 				Spec: corev1.PodSpec{
 					Containers: []corev1.Container{
 						{
-							Name:  "radioapp-container",
-							Image: "kyesikov/radio:latest",
+							Name:  "kirillApp.Spec.Name",
+							Image: "kirillApp.Spec.Image",
 							Ports: []corev1.ContainerPort{
 								{
-									ContainerPort: 3000,
+									ContainerPort: kirillApp.Spec.Port,
 								},
 							},
 						},

@@ -1,6 +1,0 @@
-apiVersion: apps.kirillesikov.atwebpages.com/v1
-kind: KirillApp
-metadata:
-    name: kirillapp-sample
-spec:
-  size: 3

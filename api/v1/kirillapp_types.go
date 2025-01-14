@@ -29,11 +29,12 @@ type KirillAppSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 	Replicas  int32                       `json:"replicas"`
-	Size      int32                       `json:"size"`
 	Name      string                      `json:"name"`
 	Port      int32                       `json:"port"`
 	Image     string                      `json:"image"`
 	Resources corev1.ResourceRequirements `json:"resources,omitempty"`
+	Labels    map[string]string           `json:"labels,omitempty"`
+	Selector  metav1.LabelSelector        `json:"Selector"`
 
 	// Foo is an example field of KirillApp. Edit kirillapp_types.go to remove/update
 
