@@ -111,7 +111,7 @@ func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *a
 							Image: "kirillApp.Spec.Image",
 							Ports: []corev1.ContainerPort{
 								{
-									ContainerPort: kirillApp.Spec.Port,
+									ContainerPort: 3000,
 								},
 							},
 						},
