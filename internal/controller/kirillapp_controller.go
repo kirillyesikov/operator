@@ -20,8 +20,8 @@ import (
 	"context"
 
 	"github.com/go-logr/logr"
-	appsv1 "github.com/kirillyesikov/operator/api/v1"
-	apps "k8s.io/api/apps/v1"
+	appv1 "github.com/kirillyesikov/operator/api/v1"
+	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -56,7 +56,7 @@ type KirillAppReconciler struct {
 func (r *KirillAppReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 
 	log := log.FromContext(ctx)
-	kirillApp := &appsv1.KirillApp{}
+	kirillApp := &appv1.KirillApp{}
 	err := r.Get(ctx, req.NamespacedName, kirillApp)
 	if err != nil {
 		if client.IgnoreNotFound(err) != nil {
@@ -86,19 +86,20 @@ func (r *KirillAppReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 	return ctrl.Result{}, nil
 }
 
-func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *appsv1.KirillApp) error {
+func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *appv1.KirillApp) error {
 	log := log.FromContext(ctx)
 
 	labels := map[string]string{
 		"app": kirillApp.Spec.Name,
 	}
 
-	deployment := &apps.Deployment{
+	deployment := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      kirillApp.Name + "-deployment",
 			Namespace: kirillApp.Namespace,
+			Labels:    labels,
 		},
-		Spec: apps.DeploymentSpec{
+		Spec: appsv1.DeploymentSpec{
 			Replicas: pointer.Int32Ptr(kirillApp.Spec.Replicas),
 			Selector: &metav1.LabelSelector{
 				MatchLabels: labels,
@@ -143,7 +144,7 @@ func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *a
 	return nil
 }
 
-func (r *KirillAppReconciler) ensureService(ctx context.Context, kirillApp *appsv1.KirillApp) error {
+func (r *KirillAppReconciler) ensureService(ctx context.Context, kirillApp *appv1.KirillApp) error {
 	log := log.FromContext(ctx)
 	service := &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
@@ -190,6 +191,6 @@ func (r *KirillAppReconciler) ensureService(ctx context.Context, kirillApp *apps
 // SetupWithManager sets up the controller with the Manager.
 func (r *KirillAppReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&appsv1.KirillApp{}).
+		For(&appv1.KirillApp{}).
 		Complete(r)
 }

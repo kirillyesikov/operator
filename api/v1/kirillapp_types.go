@@ -35,7 +35,7 @@ type KirillAppSpec struct {
 	Resources   corev1.ResourceRequirements `json:"resources,omitempty"`
 	Labels      map[string]string           `json:"labels,omitempty"`
 	MatchLabels map[string]string           `json:"matchLabels,omitempty"`
-
+	Selector    *metav1.LabelSelector       `json:"selector"`
 	// Foo is an example field of KirillApp. Edit kirillapp_types.go to remove/update
 
 }
@@ -57,7 +57,7 @@ type KirillAppStatus struct {
 type KirillApp struct {
 	metav1.TypeMeta      `json:",inline"`
 	metav1.ObjectMeta    `json:"metadata,omitempty"`
-	metav1.LabelSelector `json:"selector.omitempty"`
+	metav1.LabelSelector `json:"selector,omitempty"`
 	Spec                 KirillAppSpec   `json:"spec,omitempty"`
 	Status               KirillAppStatus `json:"status,omitempty"`
 }
