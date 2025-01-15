@@ -96,17 +96,14 @@ func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *a
 		},
 		Spec: appsv1.DeploymentSpec{
 			Replicas: pointer.Int32Ptr(kirillApp.Spec.Replicas),
-			Selector: &metav1.LabelSelector{
-				MatchLabels: map[string]string{
-					"app": "kirillapp",
-				},
-			},
+			Selector: kirillApp.Spec.Selector,
 			Template: corev1.PodTemplateSpec{
-				ObjectMeta: metav1.ObjectMeta{
-					Labels: map[string]string{
-						"app": "kirillapp",
-					},
-				},
+			   ObjectMeta: metav1.ObjectMeta{
+				Labels: map[string]string{
+					"app": "kirillapp",
+				},	
+	
+			},
 				Spec: corev1.PodSpec{
 					Containers: []corev1.Container{
 						{
