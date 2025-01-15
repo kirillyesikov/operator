@@ -30,6 +30,7 @@ func (in *KirillApp) DeepCopyInto(out *KirillApp) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
 	in.ObjectMeta.DeepCopyInto(&out.ObjectMeta)
+	in.LabelSelector.DeepCopyInto(&out.LabelSelector)
 	in.Spec.DeepCopyInto(&out.Spec)
 	in.Status.DeepCopyInto(&out.Status)
 }
@@ -95,7 +96,6 @@ func (in *KirillAppSpec) DeepCopyInto(out *KirillAppSpec) {
 			(*out)[key] = val
 		}
 	}
-	in.Selector.DeepCopyInto(&out.Selector)
 	if in.MatchLabels != nil {
 		in, out := &in.MatchLabels, &out.MatchLabels
 		*out = make(map[string]string, len(*in))

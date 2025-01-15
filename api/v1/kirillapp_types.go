@@ -34,7 +34,6 @@ type KirillAppSpec struct {
 	Image       string                      `json:"image"`
 	Resources   corev1.ResourceRequirements `json:"resources,omitempty"`
 	Labels      map[string]string           `json:"labels,omitempty"`
-	Selector    metav1.LabelSelector        `json:"selector"`
 	MatchLabels map[string]string           `json:"matchLabels,omitempty"`
 
 	// Foo is an example field of KirillApp. Edit kirillapp_types.go to remove/update
@@ -56,11 +55,11 @@ type KirillAppStatus struct {
 
 // KirillApp is the Schema for the kirillapps API
 type KirillApp struct {
-	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
-
-	Spec   KirillAppSpec   `json:"spec,omitempty"`
-	Status KirillAppStatus `json:"status,omitempty"`
+	metav1.TypeMeta      `json:",inline"`
+	metav1.ObjectMeta    `json:"metadata,omitempty"`
+	metav1.LabelSelector `json:"selector.omitempty"`
+	Spec                 KirillAppSpec   `json:"spec,omitempty"`
+	Status               KirillAppStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
