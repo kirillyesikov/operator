@@ -51,7 +51,6 @@ type KirillAppStatus struct {
 type KirillApp struct {
 	metav1.TypeMeta      `json:",inline"`
 	metav1.ObjectMeta    `json:"metadata,omitempty"`
-	metav1.LabelSelector `json:"selector,omitempty"`
 	Spec                 KirillAppSpec   `json:"spec,omitempty"`
 	Status               KirillAppStatus `json:"status,omitempty"`
 }
