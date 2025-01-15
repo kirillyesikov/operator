@@ -89,24 +89,23 @@ func (r *KirillAppReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *appv1.KirillApp) error {
 	log := log.FromContext(ctx)
 
-	labels := map[string]string{
-		"app": kirillApp.Spec.Name,
-	}
-
 	deployment := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      kirillApp.Name + "-deployment",
 			Namespace: kirillApp.Namespace,
-			Labels:    labels,
 		},
 		Spec: appsv1.DeploymentSpec{
 			Replicas: pointer.Int32Ptr(kirillApp.Spec.Replicas),
 			Selector: &metav1.LabelSelector{
-				MatchLabels: labels,
+				MatchLabels: map[string]string{
+					"app": "kirillapp",
+				},
 			},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
-					Labels: labels,
+					Labels: map[string]string{
+						"app": "kirillapp",
+					},
 				},
 				Spec: corev1.PodSpec{
 					Containers: []corev1.Container{

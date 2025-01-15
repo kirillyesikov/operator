@@ -37,7 +37,6 @@ spec:
             - image
             - port
             - replicas
-            - labels
             - selector
             - template
             properties:
@@ -58,11 +57,6 @@ spec:
                 format: int32
                 description: Number of replicas for the application.
                 minimum: 1
-              labels:
-                type: object
-                additionalProperties:
-                  type: string
-                description: Custom labels for the application.
               selector:
                 type: object
                 description: Label selector for pods managed by the application.
