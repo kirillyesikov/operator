@@ -100,7 +100,7 @@ func (r *KirillAppReconciler) ensureDeployment(ctx context.Context, kirillApp *a
 			Template: corev1.PodTemplateSpec{
 			   ObjectMeta: metav1.ObjectMeta{
 				Labels: map[string]string{
-					"app": "kirillapp",
+					"app": kirillApp.Name,
 				},	
 	
 			},
