@@ -17,7 +17,7 @@ limitations under the License.
 package v1
 
 import (
-	
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -28,8 +28,9 @@ import (
 type KirillAppSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
-	Replicas    int32                       `json:"replicas,omitempty"`
-	Selector    *metav1.LabelSelector       `json:"selector,omitempty"`
+	Replicas int32                  `json:"replicas,omitempty"`
+	Selector *metav1.LabelSelector  `json:"selector,omitempty"`
+	Template corev1.PodTemplateSpec `json:"template,omitempty"`
 	// Foo is an example field of KirillApp. Edit kirillapp_types.go to remove/update
 
 }
@@ -49,10 +50,10 @@ type KirillAppStatus struct {
 
 // KirillApp is the Schema for the kirillapps API
 type KirillApp struct {
-	metav1.TypeMeta      `json:",inline"`
-	metav1.ObjectMeta    `json:"metadata,omitempty"`
-	Spec                 KirillAppSpec   `json:"spec,omitempty"`
-	Status               KirillAppStatus `json:"status,omitempty"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              KirillAppSpec   `json:"spec,omitempty"`
+	Status            KirillAppStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
